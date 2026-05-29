@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<template id="__bundler_thumbnail" data-bg-color="#000000">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#000000"/>
+    <text x="600" y="470" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="320" font-weight="500" fill="#fffcd4">G<tspan fill="#fffcd4">/</tspan><tspan fill="#9c0000">.</tspan></text>
+  </svg>
+</template>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Godwin Austen — A consultancy for EPM &amp; technology companies</title>
+<style>
+/* ============================================================
+   GODWIN AUSTEN — single-page site
+   Grounded in the Godwin Austen design system (tokens below).
+   ============================================================ */
+
+/* ---------- FONTS (self-hosted variable) ---------- */
+@font-face{
+  font-family:"Noto Serif GA";
+  src:url("fonts/NotoSerifJP-VariableFont_wght.ttf") format("truetype");
+  font-weight:200 900; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Inter GA";
+  src:url("fonts/Inter-VariableFont_opsz_wght.ttf") format("truetype");
+  font-weight:100 900; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Inter GA";
+  src:url("fonts/Inter-Italic-VariableFont_opsz_wght.ttf") format("truetype");
+  font-weight:100 900; font-style:italic; font-display:swap;
+}
+
+:root{
+  /* brand */
+  --ga-black:#000000;
+  --ga-dark-red:#550816;
+  --ga-vivid-red:#9c0000;
+  --ga-off-white:#fffcd4;
+  /* neutrals */
+  --ink-800:#0c0a0b; --ink-700:#161113; --ink-600:#241a1d; --ink-500:#3a2c30;
+  --ash-400:#6b5a5e; --ash-300:#9a8a8e;
+  --red-600:#74091b; --red-400:#c0282b; --dot:#b91c3a;
+  /* semantic */
+  --bg:var(--ga-black);
+  --surface:var(--ink-700);
+  --border:var(--ink-600);
+  --border-strong:var(--ink-500);
+  --fg1:var(--ga-off-white);
+  --fg2:#cfc9a4;
+  --fg3:var(--ash-400);
+  --accent:var(--ga-vivid-red);
+  /* type */
+  --serif:"Noto Serif GA","Times New Roman",Georgia,serif;
+  --sans:"Inter GA",system-ui,-apple-system,"Segoe UI",sans-serif;
+  /* spacing */
+  --shell:1240px;
+  /* motion */
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --dur:240ms; --dur-slow:600ms;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--bg); color:var(--fg1);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+::selection{background:var(--ga-vivid-red); color:#fff;}
+img{display:block;}
+button{font-family:inherit;}
+
+.shell{max-width:var(--shell); margin:0 auto; padding:0 48px;}
+@media(max-width:720px){ .shell{padding:0 26px;} }
+
+/* ---------- TYPE HELPERS ---------- */
+.eyebrow{font-weight:600; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--dot);}
+.eyebrow-muted{color:var(--fg3);}
+.serif{font-family:var(--serif); font-weight:500;}
+.dot-accent{color:var(--dot);}
+
+/* ---------- BUTTONS ---------- */
+.btn{
+  font-weight:600; font-size:13.5px; letter-spacing:.04em;
+  padding:14px 28px; border-radius:2px; border:1px solid transparent; cursor:pointer;
+  display:inline-flex; align-items:center; gap:10px; white-space:nowrap;
+  transition:background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease), transform 140ms var(--ease);
+  text-decoration:none;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--ga-vivid-red); color:#fff;}
+.btn-primary:hover{background:var(--red-400);}
+.btn-ghost{background:transparent; color:var(--fg1); border-color:var(--border-strong);}
+.btn-ghost:hover{border-color:var(--fg3);}
+.btn-sm{padding:10px 18px; font-size:12px;}
+.btn .i{width:17px; height:17px; transition:transform var(--dur) var(--ease);}
+.btn-primary:hover .i, .btn-ghost:hover .i{transform:translateX(3px);}
+
+.i{stroke:currentColor; stroke-width:1.5; fill:none; stroke-linecap:round; stroke-linejoin:round; flex:none;}
+
+/* ============================================================
+   NAV — centred cluster, revealed on scroll
+   ============================================================ */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:80;
+  display:flex; justify-content:center;
+  padding:16px 24px;
+  background:rgba(0,0,0,0); border-bottom:1px solid transparent;
+  opacity:0; transform:translateY(-10px); pointer-events:none;
+  transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease), background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.nav.show{
+  opacity:1; transform:none; pointer-events:auto;
+  background:rgba(0,0,0,.74); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-cluster{display:flex; align-items:center; gap:34px;}
+.nav-mark{height:24px; width:auto; cursor:pointer;}
+.nav-links{display:flex; align-items:center; gap:30px;}
+.nav-link{
+  background:none; border:0; padding:6px 0; cursor:pointer;
+  font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--fg2);
+  position:relative; transition:color var(--dur) var(--ease);
+}
+.nav-link:hover{color:var(--fg1);}
+.nav-link::after{content:""; position:absolute; left:0; right:0; bottom:-3px; height:1px; background:var(--dot); transform:scaleX(0); transform-origin:left; transition:transform var(--dur) var(--ease);}
+.nav-link:hover::after{transform:scaleX(1);}
+@media(max-width:760px){ .nav-links{display:none;} .nav-cluster{gap:20px;} }
+
+/* ============================================================
+   SECTION 01 — HERO (centred)
+   ============================================================ */
+.hero{
+  min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:120px 0 80px; position:relative;
+}
+.hero-logo{
+  width:clamp(168px,18vw,236px); height:auto; margin-bottom:clamp(44px,5.5vw,72px);
+  animation:fadeUp 900ms var(--ease) both;
+}
+.hero-statement{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(23px,2.5vw,37px); line-height:1.5; letter-spacing:-.005em;
+  max-width:min(92vw,760px); margin:0 auto; color:var(--fg1);
+  animation:fadeUp 900ms var(--ease) 120ms both;
+}
+.hero-statement .succeeded{display:block; margin-top:.5em; color:var(--fg2);}
+.hero-statement .succeeded em{font-style:italic; color:var(--fg1);}
+.hero-statement .succeeded .dot-accent{font-style:normal;}
+.hero-cta{margin-top:clamp(44px,5vw,60px); animation:fadeUp 900ms var(--ease) 360ms both;}
+
+/* scroll cue */
+.scroll-cue{
+  position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  animation:fadeUp 900ms var(--ease) 600ms both;
+}
+.scroll-cue .line{width:1px; height:40px; background:linear-gradient(var(--border-strong),transparent); position:relative; overflow:hidden;}
+.scroll-cue .line::after{content:""; position:absolute; top:-40%; left:0; width:1px; height:40%; background:var(--dot); animation:cue 2.2s var(--ease) infinite;}
+@keyframes cue{0%{top:-45%;}60%,100%{top:100%;}}
+
+@keyframes fadeUp{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:none;}}
+
+/* ---------- CREDIBILITY STRIP ---------- */
+.cred{border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+.cred-inner{
+  display:grid; grid-template-columns:repeat(3,1fr);
+}
+.cred-cell{
+  padding:56px 40px; border-left:1px solid var(--border);
+  display:flex; flex-direction:column; gap:18px;
+}
+.cred-cell:first-child{border-left:0;}
+.cred-num{
+  font-family:var(--serif); font-weight:500; line-height:1;
+  font-size:clamp(54px,6vw,86px); color:var(--fg1); letter-spacing:-.02em;
+}
+.cred-num .pct{color:var(--dot); font-size:.55em; vertical-align:.06em; margin-left:.04em;}
+.cred-desc{font-size:15px; line-height:1.6; color:var(--fg2); max-width:30ch;}
+.cred-desc b{color:var(--fg1); font-weight:600;}
+@media(max-width:860px){
+  .cred-inner{grid-template-columns:1fr;}
+  .cred-cell{border-left:0; border-top:1px solid var(--border); padding:40px 0;}
+  .cred-cell:first-child{border-top:0;}
+}
+
+/* ============================================================
+   SECTION 02 — MANIFESTO + TEAM
+   ============================================================ */
+/* manifesto: deep-red full-bleed field (the "wax seal" break) */
+.manifesto{background:var(--ga-dark-red); color:var(--ga-off-white); padding:clamp(90px,11vw,150px) 0;}
+.manifesto-lead{
+  font-size:14px; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+  color:#e2b9bf; margin:0 0 34px; display:flex; align-items:center; gap:14px;
+}
+.manifesto-lead .bar{width:32px; height:1px; background:#e2b9bf;}
+.manifesto-truth{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(32px,4.6vw,66px); line-height:1.08; letter-spacing:-.015em;
+  margin:0; max-width:20ch;
+}
+.manifesto-truth .dot-accent{color:#ffb3bd;}
+
+/* team */
+.team{padding:clamp(80px,9vw,128px) 0;}
+.team-intro{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(22px,2.5vw,34px); line-height:1.34; letter-spacing:-.01em;
+  color:var(--fg1); max-width:30ch; margin:0 0 64px;
+}
+.team-intro .em{color:var(--fg2); font-style:italic;}
+.team-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:26px;}
+@media(max-width:900px){ .team-grid{grid-template-columns:repeat(2,1fr); gap:32px 26px;} }
+@media(max-width:520px){ .team-grid{grid-template-columns:1fr;} }
+.person .portrait{
+  position:relative; aspect-ratio:4/5; overflow:hidden;
+  background:var(--ink-800); border:1px solid var(--border); filter:grayscale(1) contrast(1.03);
+}
+.portrait .slot{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+  background:repeating-linear-gradient(135deg,transparent 0 22px,rgba(255,252,212,.02) 22px 23px),var(--ink-800);
+}
+.portrait .slot img{width:38px; opacity:.5;}
+.portrait .slot .lbl{font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--fg3);}
+.person .name{font-family:var(--serif); font-weight:500; font-size:21px; color:var(--fg1); margin:18px 0 0;}
+.person .role{font-size:12px; letter-spacing:.04em; color:var(--dot); margin-top:6px; font-weight:600;}
+.person .bio{font-size:13.5px; line-height:1.55; color:var(--fg2); margin:12px 0 0;}
+
+/* ============================================================
+   SECTION 03 — SERVICES (interactive table-diagram)
+   ============================================================ */
+.services{padding:clamp(80px,9vw,128px) 0; border-top:1px solid var(--border);}
+.section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:48px; margin-bottom:56px; flex-wrap:wrap;}
+.section-head h2{font-family:var(--serif); font-weight:500; font-size:clamp(40px,5vw,72px); line-height:1; letter-spacing:-.02em; margin:10px 0 0;}
+.section-head .lede{max-width:34ch; font-size:15.5px; line-height:1.6; color:var(--fg2);}
+
+.svc-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border);}
+@media(max-width:860px){ .svc-grid{grid-template-columns:1fr;} }
+.svc-col{
+  background:var(--ga-black); padding:38px 32px 32px;
+  cursor:default; transition:background var(--dur) var(--ease);
+}
+.svc-col:hover{background:var(--ink-700);}
+.svc-col-head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding-bottom:24px; border-bottom:1px solid var(--border-strong); position:relative;}
+.svc-col-head::after{content:""; position:absolute; left:0; bottom:-1px; height:2px; width:0; background:var(--dot); transition:width var(--dur-slow) var(--ease);}
+.svc-col:hover .svc-col-head::after{width:100%;}
+.svc-col-head h3{font-family:var(--serif); font-weight:500; font-size:25px; color:var(--fg1); margin:0;}
+.svc-col-head .idx{font-family:var(--sans); font-size:11px; letter-spacing:.16em; color:var(--fg3);}
+.svc-list{list-style:none; margin:0; padding:0;}
+.svc-item{
+  display:flex; align-items:center; gap:14px; padding:17px 0; border-top:1px solid var(--border);
+  font-size:15px; color:var(--fg2); transition:color var(--dur) var(--ease), padding-left var(--dur) var(--ease);
+}
+.svc-col .svc-list .svc-item:first-child{border-top:0;}
+.svc-item .mk{width:5px; height:5px; border-radius:50%; background:var(--ink-500); flex:none; transition:background var(--dur) var(--ease), transform var(--dur) var(--ease);}
+.svc-item:hover{color:var(--fg1); padding-left:8px;}
+.svc-item:hover .mk{background:var(--dot); transform:scale(1.4);}
+
+.svc-foot{
+  margin-top:48px; display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap;
+  border-top:1px solid var(--border); padding-top:40px;
+}
+.svc-foot p{font-family:var(--serif); font-weight:500; font-size:clamp(20px,2.3vw,30px); line-height:1.3; letter-spacing:-.01em; color:var(--fg1); max-width:30ch; margin:0;}
+.svc-foot p .dot-accent{color:var(--dot);}
+
+/* ============================================================
+   SECTION 04 — TESTIMONIALS
+   ============================================================ */
+.voices{padding:clamp(80px,9vw,128px) 0; border-top:1px solid var(--border); background:var(--ink-800);}
+.voices-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:48px;}
+@media(max-width:860px){ .voices-grid{grid-template-columns:1fr;} }
+.voice{background:var(--ink-800); padding:44px 36px 38px; display:flex; flex-direction:column;}
+.voice .quote-mark{font-family:var(--serif); font-size:60px; line-height:.6; color:var(--dot); height:34px;}
+.voice blockquote{font-family:var(--serif); font-weight:500; font-size:20px; line-height:1.42; letter-spacing:-.01em; color:var(--fg1); margin:18px 0 0;}
+.voice .attr{margin-top:auto; padding-top:30px; display:flex; flex-direction:column; gap:3px;}
+.voice .attr .who{font-size:13.5px; font-weight:600; color:var(--fg1);}
+.voice .attr .where{font-size:12px; letter-spacing:.04em; color:var(--fg3);}
+
+/* ============================================================
+   SECTION 05 — INTRODUCTION FORM
+   ============================================================ */
+.contact{border-top:1px solid var(--border); background:var(--ga-black);}
+.contact-inner{display:grid; grid-template-columns:1fr 1fr; gap:80px; padding:clamp(80px,9vw,120px) 0;}
+@media(max-width:860px){ .contact-inner{grid-template-columns:1fr; gap:48px;} }
+.contact h2{font-family:var(--serif); font-weight:500; font-size:clamp(36px,4.4vw,60px); line-height:1.02; letter-spacing:-.02em; margin:14px 0 0;}
+.contact .sub{margin-top:24px; color:var(--fg2); font-size:16px; line-height:1.65; max-width:38ch;}
+.contact-meta{margin-top:44px; display:flex; flex-direction:column; gap:16px; color:var(--fg2); font-size:14px;}
+.contact-meta span{display:flex; align-items:center; gap:13px;}
+.contact-meta .i{width:17px; height:17px; color:var(--dot);}
+
+.form{display:flex; flex-direction:column; gap:22px;}
+.field{display:flex; flex-direction:column; gap:9px;}
+.field label{font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--ash-300);}
+.field input, .field select{
+  font-family:var(--sans); font-size:15px; color:var(--fg1); background:var(--ga-black);
+  border:1px solid var(--border); border-radius:2px; padding:14px 15px;
+  transition:border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  appearance:none; -webkit-appearance:none;
+}
+.field select{cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b5a5e' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 15px center; padding-right:42px;}
+.field input::placeholder{color:var(--ash-400);}
+.field input:focus, .field select:focus{outline:none; border-color:var(--ga-vivid-red); box-shadow:0 0 0 3px rgba(156,0,0,.18);}
+.field-row{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+@media(max-width:520px){ .field-row{grid-template-columns:1fr;} }
+.form .note{font-size:12px; color:var(--fg3); line-height:1.5;}
+
+.form-done{padding:30px 0; animation:fadeUp 500ms var(--ease) both;}
+.form-done .check{width:48px; height:48px; border-radius:50%; background:var(--ga-vivid-red); display:flex; align-items:center; justify-content:center;}
+.form-done .check .i{width:24px; height:24px; color:#fff;}
+.form-done h3{font-family:var(--serif); font-weight:500; font-size:30px; margin:22px 0 0;}
+.form-done p{color:var(--fg2); margin:12px 0 0; max-width:34ch; line-height:1.6;}
+
+/* ============================================================
+   SECTION 06 — FOOTER
+   ============================================================ */
+.footer{border-top:1px solid var(--border); padding:76px 0 44px;}
+.footer-top{display:flex; justify-content:space-between; gap:48px; flex-wrap:wrap;}
+.footer-brand{max-width:300px;}
+.footer-brand img{height:58px; width:auto;}
+.footer-brand p{color:var(--fg3); font-size:13.5px; line-height:1.6; margin-top:24px;}
+.footer-cols{display:flex; gap:72px; flex-wrap:wrap;}
+.footer-col{display:flex; flex-direction:column; gap:13px;}
+.footer-col .h{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--fg3); margin-bottom:5px;}
+.footer-col a{color:var(--fg2); text-decoration:none; font-size:14px; cursor:pointer; transition:color var(--dur) var(--ease);}
+.footer-col a:hover{color:var(--fg1);}
+.footer-bottom{display:flex; justify-content:space-between; align-items:center; margin-top:64px; padding-top:28px; border-top:1px solid var(--border); color:var(--fg3); font-size:12.5px; letter-spacing:.04em; flex-wrap:wrap; gap:16px;}
+.footer-bottom a{color:var(--fg3); text-decoration:none; cursor:pointer;}
+.footer-bottom .legal{display:flex; gap:28px;}
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+.reveal{opacity:0; transform:translateY(26px); transition:opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);}
+.reveal.in{opacity:1; transform:none;}
+.reveal.d1{transition-delay:90ms;} .reveal.d2{transition-delay:180ms;} .reveal.d3{transition-delay:270ms;} .reveal.d4{transition-delay:360ms;}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1; transform:none; transition:none;}
+  .hero-logo,.hero-statement,.hero-cta,.scroll-cue{animation:none;}
+  html{scroll-behavior:auto;}
+}
+
+/* ============================================================
+   TWEAKS PANEL (design-review tool — hidden unless activated)
+   ============================================================ */
+.tw-panel{
+  position:fixed; right:20px; bottom:20px; z-index:200; width:286px; max-height:84vh; overflow:auto;
+  background:rgba(12,10,11,.97); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--border-strong); border-radius:4px; box-shadow:0 24px 70px rgba(0,0,0,.65);
+  color:var(--fg1); font-family:var(--sans); display:none;
+}
+.tw-panel.open{display:block;}
+.tw-head{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border); position:sticky; top:0; background:rgba(12,10,11,.97);}
+.tw-head .ttl{font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--fg2); font-weight:600;}
+.tw-close{background:none; border:0; color:var(--fg3); cursor:pointer; width:26px; height:26px; display:flex; align-items:center; justify-content:center; border-radius:3px;}
+.tw-close:hover{color:var(--fg1); background:var(--surface);}
+.tw-close .i{width:16px; height:16px;}
+.tw-body{padding:4px 16px 18px;}
+.tw-sec{font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--dot); margin:20px 0 12px;}
+.tw-row{margin:15px 0;}
+.tw-row .lab{display:flex; justify-content:space-between; align-items:baseline; font-size:12.5px; color:var(--fg2); margin-bottom:9px;}
+.tw-row .lab b{color:var(--fg1); font-weight:600; font-variant-numeric:tabular-nums; font-size:12px;}
+.tw-range{width:100%; height:3px; accent-color:var(--dot); cursor:pointer;}
+.tw-swatches{display:flex; gap:9px;}
+.tw-sw{width:30px; height:30px; border-radius:50%; border:1px solid var(--border-strong); cursor:pointer; padding:0; transition:box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);}
+.tw-sw:hover{transform:scale(1.06);}
+.tw-sw.sel{box-shadow:0 0 0 2px var(--bg), 0 0 0 3px var(--fg1);}
+.tw-seg{display:flex; border:1px solid var(--border-strong); border-radius:3px; overflow:hidden;}
+.tw-seg button{flex:1; background:none; border:0; border-left:1px solid var(--border-strong); color:var(--fg3); padding:9px 0; font-size:12px; cursor:pointer; font-family:inherit; transition:background var(--dur) var(--ease), color var(--dur) var(--ease);}
+.tw-seg button:first-child{border-left:0;}
+.tw-seg button.sel{background:var(--surface); color:var(--fg1);}
+.tw-toggle-row{display:flex; align-items:center; justify-content:space-between; margin:15px 0;}
+.tw-toggle-row .lab{font-size:12.5px; color:var(--fg2);}
+.tw-switch{width:40px; height:22px; border-radius:999px; background:var(--ink-600); border:1px solid var(--border-strong); position:relative; cursor:pointer; transition:background var(--dur) var(--ease), border-color var(--dur) var(--ease); flex:none;}
+.tw-switch.on{background:var(--dot); border-color:var(--dot);}
+.tw-switch .kn{position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:transform var(--dur) var(--ease);}
+.tw-switch.on .kn{transform:translateX(18px);}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV (revealed on scroll) ============ -->
+<nav class="nav" id="nav" aria-label="Primary">
+  <div class="nav-cluster">
+    <img class="nav-mark" src="assets/logo-mark-white-dot.png" alt="Godwin Austen" data-scroll="top">
+    <div class="nav-links">
+      <button class="nav-link" data-scroll="firm">Firm</button>
+      <button class="nav-link" data-scroll="services">Services</button>
+      <button class="nav-link" data-scroll="voices">Clients</button>
+      <button class="nav-link" data-scroll="contact">Contact</button>
+    </div>
+    <a class="btn btn-primary btn-sm" data-scroll="contact" href="#contact">Enquire</a>
+  </div>
+</nav>
+
+<!-- ============ SECTION 01 — HERO ============ -->
+<header class="hero" id="top" data-screen-label="01 · Hero">
+  <img class="hero-logo" src="assets/logo-lockup-white-dot.png" alt="Godwin Austen — a consortium of technology experts">
+  <h1 class="hero-statement" style="font-size: 26px; font-weight: 400">Before we got great at consulting for EPM &amp; technology companies on their growth, we were exceptional at building and scaling our own companies. 
+
+Godwin Austen, a consortium of experts.
+</h1>
+  <div class="hero-cta">
+    <a class="btn btn-primary" data-scroll="services" href="#services">
+      View our services
+      <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="scroll-cue"><span class="line"></span></div>
+</header>
+
+<!-- ============ CREDIBILITY STRIP ============ -->
+<section class="cred" aria-label="Selected outcomes" data-screen-label="01 · Credibility">
+  <div class="cred-inner">
+    <div class="cred-cell reveal">
+      <div class="cred-num"><span class="count" data-target="67">0</span><span class="pct">%</span></div>
+      <p class="cred-desc"><b>Increase</b> for an EPM company in London after two years working with us on go-to-market.</p>
+    </div>
+    <div class="cred-cell reveal d1">
+      <div class="cred-num"><span class="count" data-target="45">0</span><span class="pct">%</span></div>
+      <p class="cred-desc"><b>Cost savings</b>, sustained over five years, for a tech consultancy in Hertfordshire from our recruitment services.</p>
+    </div>
+    <div class="cred-cell reveal d2">
+      <div class="cred-num"><span class="count" data-target="210">0</span><span class="pct">%</span></div>
+      <p class="cred-desc"><b>Improvement</b> in sales pipeline within six months from our advisory.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 02 — MANIFESTO ============ -->
+<section class="manifesto" id="firm" data-screen-label="02 · Manifesto">
+  <div class="shell">
+    <p class="manifesto-lead reveal">WE BUILT GODWIN AUSTEN ON A TRUTH THAT SHOULD BE PAINFULLY OBVIOUS</p>
+    <p class="manifesto-truth serif reveal d1">No one should advise you on your growth if they have not done it themselves<span class="dot-accent">.</span></p>
+  </div>
+</section>
+
+<!-- ============ SECTION 02 — TEAM ============ -->
+<section class="team" data-screen-label="02 · Team">
+  <div class="shell">
+    <p class="team-intro reveal">
+      We are a consortium of people who have done it — built, scaled, exited, over and over.
+      <span class="em">A team that can take you further than another big-name shop with a single face.</span>
+    </p>
+    <div class="team-grid">
+      <article class="person reveal">
+        <div class="portrait"><div class="slot"><img src="assets/logo-mark-white.png" alt=""><span class="lbl">Portrait</span></div></div>
+        <h3 class="name">Eleanor Whitcombe</h3>
+        <p class="role">Founding Partner</p>
+        <p class="bio">Scaled an EPM platform from seed to a nine-figure exit. Twenty years in enterprise software.</p>
+      </article>
+      <article class="person reveal d1">
+        <div class="portrait"><div class="slot"><img src="assets/logo-mark-white.png" alt=""><span class="lbl">Portrait</span></div></div>
+        <h3 class="name">Idris Okonkwo</h3>
+        <p class="role">Partner · Go-to-Market</p>
+        <p class="bio">Built and led revenue at three category-defining SaaS firms. Two through to acquisition.</p>
+      </article>
+      <article class="person reveal d2">
+        <div class="portrait"><div class="slot"><img src="assets/logo-mark-white.png" alt=""><span class="lbl">Portrait</span></div></div>
+        <h3 class="name">Marguerite Saito</h3>
+        <p class="role">Partner · Advisory</p>
+        <p class="bio">Former CFO and operator. Has sat on both sides of the diligence table more than thirty times.</p>
+      </article>
+      <article class="person reveal d3">
+        <div class="portrait"><div class="slot"><img src="assets/logo-mark-white.png" alt=""><span class="lbl">Portrait</span></div></div>
+        <h3 class="name">Tobias Renner</h3>
+        <p class="role">Partner · Talent</p>
+        <p class="bio">Placed the leadership benches behind four of the UK's fastest-growing tech companies.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 03 — SERVICES ============ -->
+<section class="services" id="services" data-screen-label="03 · Services">
+  <div class="shell">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow reveal">
+</div>
+        <h2 class="reveal d1">Services</h2>
+      </div>
+      <p class="lede reveal d2">
+</p>
+    </div>
+
+    <div class="svc-grid reveal">
+      <div class="svc-col">
+        <div class="svc-col-head"><h3>Advisory</h3><span class="idx">01</span></div>
+        <ul class="svc-list">
+          <li class="svc-item"><span class="mk"></span>Growth strategy &amp; operating model</li>
+          <li class="svc-item"><span class="mk"></span>Board &amp; founder counsel</li>
+          <li class="svc-item"><span class="mk"></span>Market entry &amp; expansion</li>
+          <li class="svc-item"><span class="mk"></span>M&amp;A and exit readiness</li>
+          <li class="svc-item"><span class="mk"></span>Pricing &amp; packaging</li>
+        </ul>
+      </div>
+      <div class="svc-col">
+        <div class="svc-col-head"><h3>GTM / Marketing</h3><span class="idx">02</span></div>
+        <ul class="svc-list">
+          <li class="svc-item"><span class="mk"></span>Positioning &amp; messaging</li>
+          <li class="svc-item"><span class="mk"></span>Demand generation</li>
+          <li class="svc-item"><span class="mk"></span>Brand &amp; category design</li>
+          <li class="svc-item"><span class="mk"></span>Sales enablement</li>
+          <li class="svc-item"><span class="mk"></span>Partnerships &amp; alliances</li>
+        </ul>
+      </div>
+      <div class="svc-col">
+        <div class="svc-col-head"><h3>Recruitment</h3><span class="idx">03</span></div>
+        <ul class="svc-list">
+          <li class="svc-item"><span class="mk"></span>Executive search</li>
+          <li class="svc-item"><span class="mk"></span>Revenue &amp; GTM leadership</li>
+          <li class="svc-item"><span class="mk"></span>Technical &amp; product hires</li>
+          <li class="svc-item"><span class="mk"></span>Fractional &amp; interim</li>
+          <li class="svc-item"><span class="mk"></span>Team design &amp; compensation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="svc-foot reveal">
+      <p>If it's EPM, if it's tech and the problem is growth — speak to us. We will meet you in spaces not listed above<span class="dot-accent">.</span></p>
+      <a class="btn btn-primary" data-scroll="contact" href="#contact">
+        Enquire now
+        <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 04 — TESTIMONIALS ============ -->
+<section class="voices" id="voices" data-screen-label="04 · Clients">
+  <div class="shell">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow reveal">In their words</div>
+        <h2 class="reveal d1">What clients say</h2>
+      </div>
+      <p class="lede reveal d2">A short list of engagements, chosen because the people we work with would take the call for us.</p>
+    </div>
+    <div class="voices-grid">
+      <figure class="voice reveal">
+        <div class="quote-mark">&ldquo;</div>
+        <blockquote>They had run the playbook before us. That meant no theory, no slides for the sake of slides — just the next right move.</blockquote>
+        <figcaption class="attr"><span class="who">CEO</span><span class="where">EPM platform · London</span></figcaption>
+      </figure>
+      <figure class="voice reveal d1">
+        <div class="quote-mark">&ldquo;</div>
+        <blockquote>We replaced a year of trial and error with three months of certainty. Pipeline followed almost immediately.</blockquote>
+        <figcaption class="attr"><span class="who">Founder</span><span class="where">Series B SaaS · Manchester</span></figcaption>
+      </figure>
+      <figure class="voice reveal d2">
+        <div class="quote-mark">&ldquo;</div>
+        <blockquote>The hires they placed are still here, still leading. That is the only recruitment metric that has ever mattered to me.</blockquote>
+        <figcaption class="attr"><span class="who">Chair</span><span class="where">Tech consultancy · Hertfordshire</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 05 — FORM ============ -->
+<section class="contact" id="contact" data-screen-label="05 · Introduction">
+  <div class="shell">
+    <div class="contact-inner">
+      <div>
+        <div class="eyebrow reveal">Contact</div>
+        <h2 class="serif reveal d1">Ask for an<br>introduction<span class="dot-accent">.</span></h2>
+        <p class="sub reveal d2">We take on a limited number of engagements. A few details is enough — we will reply with the right person to speak to.</p>
+        <div class="contact-meta reveal d3">
+          <span><svg class="i" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>introductions@godwinausten.co</span>
+          <span><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>London · United Kingdom</span>
+        </div>
+      </div>
+
+      <div class="reveal d1">
+        <form class="form" id="introForm" novalidate>
+          <div class="field">
+            <label for="f-name">Full name</label>
+            <input id="f-name" name="name" type="text" placeholder="Your name" required>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-company">Company</label>
+              <input id="f-company" name="company" type="text" placeholder="Where you work" required>
+            </div>
+            <div class="field">
+              <label for="f-email">Work email</label>
+              <input id="f-email" name="email" type="email" placeholder="you@company.com" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-service">Service of interest</label>
+            <select id="f-service" name="service" required>
+              <option value="" disabled selected>Select a practice</option>
+              <option value="advisory">Advisory</option>
+              <option value="gtm">GTM / Marketing</option>
+              <option value="recruitment">Recruitment</option>
+              <option value="unsure">Not sure yet</option>
+            </select>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary">
+              Request an introduction
+              <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+          <p class="note">We reply to every genuine enquiry within two business days.</p>
+        </form>
+
+        <div class="form-done" id="formDone" hidden>
+          <div class="check"><svg class="i" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h3 class="serif" id="doneName">Received, thank you.</h3>
+          <p>An introduction to the right person will follow within two business days.</p>
+          <div style="margin-top:26px;">
+            <button class="btn btn-ghost btn-sm" id="resetForm">Send another</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 06 — FOOTER ============ -->
+<footer class="footer" data-screen-label="06 · Footer">
+  <div class="shell">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/logo-mark-white-dot.png" alt="Godwin Austen">
+        <p>A consultancy for EPM &amp; technology companies, founded by people who have built them.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="h">Services</span>
+          <a data-scroll="services">Advisory</a>
+          <a data-scroll="services">GTM / Marketing</a>
+          <a data-scroll="services">Recruitment</a>
+        </div>
+        <div class="footer-col">
+          <span class="h">Firm</span>
+          <a data-scroll="firm">Why GA</a>
+          <a data-scroll="firm">The team</a>
+          <a data-scroll="voices">Clients</a>
+        </div>
+        <div class="footer-col">
+          <span class="h">Contact</span>
+          <a data-scroll="contact">Ask for an introduction</a>
+          <a href="mailto:introductions@godwinausten.co">introductions@godwinausten.co</a>
+          <a>London · United Kingdom</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Godwin Austen. All rights reserved.</span>
+      <span class="legal"><a>Privacy</a><a>Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ TWEAKS PANEL ============ -->
+<aside class="tw-panel" id="twPanel" aria-label="Tweaks">
+  <div class="tw-head">
+    <span class="ttl">Tweaks</span>
+    <button class="tw-close" id="twClose" aria-label="Close tweaks">
+      <svg class="i" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="tw-body" id="twBody"></div>
+</aside>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     TWEAKS — vanilla, follows the host edit-mode protocol
+     ============================================================ */
+  var TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accent": "#9c0000",
+    "logoSize": 120,
+    "headlineSize": 38,
+    "headlineWeight": 400,
+    "showScrollCue": true,
+    "countUp": true
+  }/*EDITMODE-END*/;
+  var tweaks = Object.assign({}, TWEAK_DEFAULTS);
+  var docEl = document.documentElement;
+
+  function applyTweaks(){
+    docEl.style.setProperty("--ga-vivid-red", tweaks.accent);
+    /* Force buttons to repaint: transitioned `background` won't recompute on a
+       custom-property change alone, so flush each primary CTA. */
+    document.querySelectorAll(".btn-primary").forEach(function(b){
+      var prev = b.style.transition;
+      b.style.transition = "none";
+      void b.offsetHeight;
+      b.style.transition = prev;
+    });
+    var logo = document.querySelector(".hero-logo");
+    if(logo) logo.style.width = (tweaks.logoSize === TWEAK_DEFAULTS.logoSize) ? "" : (tweaks.logoSize + "px");
+    var h = document.querySelector(".hero-statement");
+    if(h){
+      h.style.fontSize = (tweaks.headlineSize === TWEAK_DEFAULTS.headlineSize) ? "" : (tweaks.headlineSize + "px");
+      h.style.fontWeight = tweaks.headlineWeight;
+    }
+    var cue = document.querySelector(".scroll-cue");
+    if(cue) cue.style.display = tweaks.showScrollCue ? "" : "none";
+  }
+  function setTweak(key, val){
+    tweaks[key] = val;
+    applyTweaks();
+    window.parent.postMessage({ type:"__edit_mode_set_keys", edits:{ [key]: val } }, "*");
+  }
+
+  function buildPanel(){
+    var body = document.getElementById("twBody");
+    if(!body) return;
+    body.innerHTML = "";
+    function sec(label){ var d=document.createElement("div"); d.className="tw-sec"; d.textContent=label; body.appendChild(d); }
+    function labelRow(text){ var r=document.createElement("div"); r.className="tw-row"; var l=document.createElement("div"); l.className="lab"; var s=document.createElement("span"); s.textContent=text; l.appendChild(s); r.appendChild(l); return {row:r, lab:l}; }
+    function slider(label, key, min, max, step, unit){
+      var row=document.createElement("div"); row.className="tw-row";
+      var lab=document.createElement("div"); lab.className="lab";
+      var name=document.createElement("span"); name.textContent=label;
+      var val=document.createElement("b"); val.textContent=tweaks[key]+(unit||"");
+      lab.appendChild(name); lab.appendChild(val); row.appendChild(lab);
+      var input=document.createElement("input"); input.type="range"; input.className="tw-range";
+      input.min=min; input.max=max; input.step=step||1; input.value=tweaks[key];
+      input.addEventListener("input", function(){ var v=parseInt(input.value,10); val.textContent=v+(unit||""); setTweak(key, v); });
+      row.appendChild(input); body.appendChild(row);
+    }
+    function swatches(label, key, opts){
+      var b0=labelRow(label); var wrap=document.createElement("div"); wrap.className="tw-swatches";
+      opts.forEach(function(c){
+        var b=document.createElement("button"); b.className="tw-sw"+(tweaks[key]===c?" sel":""); b.style.background=c; b.title=c;
+        b.addEventListener("click", function(){ setTweak(key,c); wrap.querySelectorAll(".tw-sw").forEach(function(s){s.classList.remove("sel");}); b.classList.add("sel"); });
+        wrap.appendChild(b);
+      });
+      b0.row.appendChild(wrap); body.appendChild(b0.row);
+    }
+    function seg(label, key, opts){
+      var b0=labelRow(label); var wrap=document.createElement("div"); wrap.className="tw-seg";
+      opts.forEach(function(o){
+        var b=document.createElement("button"); b.textContent=o.label; if(tweaks[key]===o.value) b.classList.add("sel");
+        b.addEventListener("click", function(){ setTweak(key,o.value); wrap.querySelectorAll("button").forEach(function(s){s.classList.remove("sel");}); b.classList.add("sel"); });
+        wrap.appendChild(b);
+      });
+      b0.row.appendChild(wrap); body.appendChild(b0.row);
+    }
+    function toggle(label, key){
+      var row=document.createElement("div"); row.className="tw-toggle-row";
+      var lab=document.createElement("span"); lab.className="lab"; lab.textContent=label; row.appendChild(lab);
+      var sw=document.createElement("button"); sw.className="tw-switch"+(tweaks[key]?" on":""); sw.innerHTML='<span class="kn"></span>';
+      sw.addEventListener("click", function(){ var v=!tweaks[key]; setTweak(key,v); sw.classList.toggle("on",v); });
+      row.appendChild(sw); body.appendChild(row);
+    }
+
+    sec("Brand");
+    swatches("Accent (primary red)","accent",["#9c0000","#74091b","#c0282b","#550816"]);
+    sec("Hero");
+    slider("Logo size","logoSize",120,320,2,"px");
+    slider("Headline size","headlineSize",22,52,1,"px");
+    seg("Headline weight","headlineWeight",[{label:"Light",value:300},{label:"Regular",value:400},{label:"Medium",value:500}]);
+    toggle("Scroll cue","showScrollCue");
+    sec("Motion");
+    toggle("Count numbers up","countUp");
+  }
+
+  var panel = document.getElementById("twPanel");
+  var twClose = document.getElementById("twClose");
+  if(twClose) twClose.addEventListener("click", function(){
+    if(panel) panel.classList.remove("open");
+    window.parent.postMessage({ type:"__edit_mode_dismissed" }, "*");
+  });
+  window.addEventListener("message", function(e){
+    var t = e && e.data && e.data.type;
+    if(t === "__activate_edit_mode"){ if(panel) panel.classList.add("open"); }
+    else if(t === "__deactivate_edit_mode"){ if(panel) panel.classList.remove("open"); }
+  });
+  buildPanel();
+  applyTweaks();
+  window.parent.postMessage({ type:"__edit_mode_available" }, "*");
+
+  /* ---- smooth scroll for any [data-scroll] ---- */
+  function scrollToId(id){
+    if(id === "top"){ window.scrollTo({top:0, behavior:"smooth"}); return; }
+    var el = document.getElementById(id);
+    if(!el) return;
+    var y = el.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({top:y, behavior:"smooth"});
+  }
+  document.querySelectorAll("[data-scroll]").forEach(function(node){
+    node.addEventListener("click", function(e){
+      e.preventDefault();
+      scrollToId(node.getAttribute("data-scroll"));
+    });
+  });
+
+  /* ---- nav reveal on scroll ---- */
+  var nav = document.getElementById("nav");
+  function onScroll(){
+    if(window.scrollY > window.innerHeight * 0.62){ nav.classList.add("show"); }
+    else{ nav.classList.remove("show"); }
+  }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  onScroll();
+
+  /* ---- scroll reveal ---- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  }, {threshold:0.16, rootMargin:"0px 0px -8% 0px"});
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+
+  /* ---- count-up for credibility numbers ---- */
+  var counted = false;
+  var counters = document.querySelectorAll(".count");
+  var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+  function setFinal(){ counters.forEach(function(el){ el.textContent = el.getAttribute("data-target"); }); counted = true; }
+  function runCount(){
+    if(counted) return;
+    if(!tweaks.countUp || prefersReduced){ setFinal(); return; }
+    counted = true;
+    counters.forEach(function(el){
+      var target = parseInt(el.getAttribute("data-target"), 10);
+      var dur = 1400, start = null;
+      function step(ts){
+        if(!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        el.textContent = Math.round(easeOut(p) * target);
+        if(p < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  var credIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ runCount(); credIO.disconnect(); } });
+  }, {threshold:0.4});
+  var credSection = document.querySelector(".cred");
+  if(credSection) credIO.observe(credSection);
+
+  /* ---- form submit ---- */
+  var form = document.getElementById("introForm");
+  var done = document.getElementById("formDone");
+  var doneName = document.getElementById("doneName");
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+    var name = (form.elements["name"].value || "").trim();
+    var first = name ? name.split(" ")[0] : "";
+    doneName.textContent = first ? ("Received, " + first + ".") : "Received, thank you.";
+    form.hidden = true;
+    done.hidden = false;
+  });
+  document.getElementById("resetForm").addEventListener("click", function(){
+    form.reset();
+    done.hidden = true;
+    form.hidden = false;
+  });
+})();
+</script>
+</body>
+</html>
